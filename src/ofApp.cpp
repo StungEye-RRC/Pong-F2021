@@ -2,7 +2,9 @@
 
 //--------------------------------------------------------------
 void ofApp::setup() {
-
+	ofSetFrameRate(100);
+	ofSetWindowShape(canvasWidth, canvasHeight);
+	ofSetRectMode(OF_RECTMODE_CENTER);
 }
 
 //--------------------------------------------------------------
@@ -27,5 +29,7 @@ void ofApp::keyReleased(int key) {
 
 //--------------------------------------------------------------
 void ofApp::windowResized(int w, int h) {
-
+	if (w != canvasWidth || h != canvasHeight) {
+		ofSetWindowShape(canvasWidth, canvasHeight);
+	}
 }

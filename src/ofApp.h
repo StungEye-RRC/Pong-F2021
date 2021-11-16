@@ -14,6 +14,9 @@ public:
 	void windowResized(int w, int h) override;
 
 private:
+	const int canvasWidth{800}, canvasHeight{500};
+
+
 	bool p1UpPressed{false}, p1DownPressed{false}, p2UpPressed{false}, p2DownPressed{false};
 
 	float ballXPosition{0.0f}, ballYPosition{0.0f};
