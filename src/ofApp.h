@@ -12,4 +12,14 @@ public:
 	void keyPressed(int key) override;
 	void keyReleased(int key) override;
 	void windowResized(int w, int h) override;
+
+private:
+	bool p1UpPressed{false}, p1DownPressed{false}, p2UpPressed{false}, p2DownPressed{false};
+
+	float ballXPosition{0.0f}, ballYPosition{0.0f};
+	float ballXSpeed{0.0f}, ballYSpeed{0.0f};
+
+	float p1YPosition, p2YPosition;
+
+	int p1Score, p2Score;
 };
