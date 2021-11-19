@@ -52,7 +52,7 @@ void ofApp::update() {
 		&& (ballYPosition < p1YPosition + 60)) {
 		ballXSpeed *= -1;
 		ballYSpeed += ballYPosition - p1YPosition;
-		ballXPosition = 80;
+		ballXPosition = 70;
 	}
 
 	// BALL PADDLE 2 BOUNCE
