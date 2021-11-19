@@ -37,12 +37,25 @@ void ofApp::update() {
 
 
 	// MOVE BALL
+	ballXPosition += ballXSpeed * ofGetLastFrameTime();
+	ballYPosition += ballYSpeed * ofGetLastFrameTime();
 
 	// BALL EDGE BOUNCE
 
 	// BALL PADDLE BOUNCE
 
 	// CHECK FOR WIN
+	if (ballXPosition < 0) {
+		++p2Score;
+		startRally = true;
+		p1Serves = false;
+	}
+
+	if (ballXPosition > canvasWidth) {
+		++p1Score;
+		startRally = true;
+		p1Serves = true;
+	}
 }
 
 //--------------------------------------------------------------
