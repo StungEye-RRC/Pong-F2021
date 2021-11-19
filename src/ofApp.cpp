@@ -41,8 +41,29 @@ void ofApp::update() {
 	ballYPosition += ballYSpeed * ofGetLastFrameTime();
 
 	// BALL EDGE BOUNCE
+	if (ballYPosition <= 10 || ballYPosition >= canvasHeight - 10) {
+		ballYSpeed *= -1;
+		ballYPosition = ofClamp(ballYPosition, 10, canvasHeight - 10);
+	}
 
-	// BALL PADDLE BOUNCE
+	// BALL PADDLE 1 BOUNCE
+	if ((ballXPosition > 50 && ballXPosition < 70)
+		&& (ballYPosition > p1YPosition - 60)
+		&& (ballYPosition < p1YPosition + 60)) {
+		ballXSpeed *= -1;
+		ballYSpeed += ballYPosition - p1YPosition;
+		ballXPosition = 80;
+	}
+
+	// BALL PADDLE 2 BOUNCE
+	if ((ballXPosition > 730 && ballXPosition < 750)
+		&& (ballYPosition > p2YPosition - 60)
+		&& (ballYPosition < p2YPosition + 60)) {
+		ballXSpeed *= -1;
+		ballYSpeed += ballYPosition - p1YPosition;
+		ballXPosition = 730;
+	}
+
 
 	// CHECK FOR WIN
 	if (ballXPosition < 0) {
