@@ -16,13 +16,12 @@ public:
 private:
 	const int canvasWidth{800}, canvasHeight{500};
 
-
 	bool p1UpPressed{false}, p1DownPressed{false}, p2UpPressed{false}, p2DownPressed{false};
 
 	float ballXPosition{0.0f}, ballYPosition{0.0f};
 	float ballXSpeed{0.0f}, ballYSpeed{0.0f};
 
-	float p1YPosition, p2YPosition;
+	float p1YPosition{0.0f}, p2YPosition{0.0f};
 
-	int p1Score, p2Score;
+	short p1Score{0}, p2Score{0};
 };
