@@ -9,7 +9,29 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+	// RALLY RESTART
+	if (startRally) {
+		startRally = false;
 
+		ballXPosition = ofGetWidth() / 2.0f;
+		ballYPosition = p2YPosition = p1YPosition = ofGetHeight() / 2.0f;
+
+		std::vector<float> startSpeeds{-105.0, -70.0f, -35.0f, 35.0f, 70.0f, 105.0f};
+		ofRandomize(startSpeeds);
+
+		ballYSpeed = startSpeeds[0];
+		ballXSpeed = p1Serves ? 300 : -300;
+	}
+
+	// MOVE PADDLES
+
+	// MOVE BALL
+
+	// BALL EDGE BOUNCE
+
+	// BALL PADDLE BOUNCE
+
+	// CHECK FOR WIN
 }
 
 //--------------------------------------------------------------

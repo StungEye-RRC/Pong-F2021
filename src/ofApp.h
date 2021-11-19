@@ -16,6 +16,9 @@ public:
 private:
 	const int canvasWidth{800}, canvasHeight{500};
 
+	bool startRally{true};
+	bool p1Serves{ofRandom(0, 100) < 50};
+
 	bool p1UpPressed{false}, p1DownPressed{false}, p2UpPressed{false}, p2DownPressed{false};
 
 	float ballXPosition{0.0f}, ballYPosition{0.0f};
