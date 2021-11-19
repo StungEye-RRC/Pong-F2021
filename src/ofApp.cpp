@@ -64,7 +64,6 @@ void ofApp::update() {
 		ballXPosition = 730;
 	}
 
-
 	// CHECK FOR WIN
 	if (ballXPosition < 0) {
 		++p2Score;
