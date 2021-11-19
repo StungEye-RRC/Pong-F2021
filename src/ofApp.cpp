@@ -25,6 +25,17 @@ void ofApp::update() {
 
 	// MOVE PADDLES
 
+	const double speedChange{300 * ofGetLastFrameTime()};
+
+	if (p1UpPressed) p1YPosition -= speedChange;
+	if (p1DownPressed) p1YPosition += speedChange;
+	if (p2UpPressed) p2YPosition -= speedChange;
+	if (p2DownPressed) p2YPosition += speedChange;
+
+	p1YPosition = ofClamp(p1YPosition, 50, 450);
+	p2YPosition = ofClamp(p2YPosition, 50, 450);
+
+
 	// MOVE BALL
 
 	// BALL EDGE BOUNCE
@@ -42,7 +53,7 @@ void ofApp::draw() {
 
 	// DRAW PADDLES
 	ofDrawRectangle(50, p1YPosition, 20, 100);
-	ofDrawRectangle(750, p1YPosition, 20, 100);
+	ofDrawRectangle(750, p2YPosition, 20, 100);
 
 	// DRAW BALL
 	ofDrawRectangle(ballXPosition, ballYPosition, 20, 20);
@@ -50,12 +61,18 @@ void ofApp::draw() {
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key) {
-
+	if (key == 'w') p1UpPressed = true;
+	if (key == 's') p1DownPressed = true;
+	if (key == 'i') p2UpPressed = true;
+	if (key == 'k') p2DownPressed = true;
 }
 
 //--------------------------------------------------------------
 void ofApp::keyReleased(int key) {
-
+	if (key == 'w') p1UpPressed = false;
+	if (key == 's') p1DownPressed = false;
+	if (key == 'i') p2UpPressed = false;
+	if (key == 'k') p2DownPressed = false;
 }
 
 //--------------------------------------------------------------
