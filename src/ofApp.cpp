@@ -9,13 +9,20 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
+
+
 	// RALLY RESTART
 	if (startRally) {
 		startRally = false;
+		const auto horizontalMiddle{canvasWidth / 2.0f};
+		const auto verticalMiddle{canvasHeight / 2.0f};
 
 		// Reposition ball and paddles to center points.
-		ballXPosition = ofGetWidth() / 2.0f;
-		ballYPosition = p2YPosition = p1YPosition = ofGetHeight() / 2.0f;
+		ballXPosition = horizontalMiddle;
+		ballYPosition = p2YPosition = p1YPosition = verticalMiddle;
+
+		p1Paddle.warpTo({paddleEdgeBuffer, verticalMiddle});
+		p2Paddle.warpTo({canvasWidth - paddleEdgeBuffer, verticalMiddle});
 
 		// Pick random Y speed from a predefined selection.
 		std::vector<float> startSpeeds{-105.0, -70.0f, -35.0f, 35.0f, 70.0f, 105.0f};
@@ -105,6 +112,8 @@ void ofApp::draw() {
 	// DRAW PADDLES
 	ofDrawRectangle(50, p1YPosition, 20, 100);
 	ofDrawRectangle(750, p2YPosition, 20, 100);
+	p1Paddle.draw();
+	p2Paddle.draw();
 
 	// DRAW BALL
 	ofDrawRectangle(ballXPosition, ballYPosition, 20, 20);
