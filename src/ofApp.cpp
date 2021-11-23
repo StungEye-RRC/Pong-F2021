@@ -19,7 +19,7 @@ void ofApp::update() {
 
 		// Reposition ball and paddles to center points.
 		ballXPosition = horizontalMiddle;
-		ballYPosition = p2YPosition = p1YPosition = verticalMiddle;
+		ballYPosition = verticalMiddle;
 
 		p1Paddle.warpTo({paddleEdgeBuffer, verticalMiddle});
 		p2Paddle.warpTo({canvasWidth - paddleEdgeBuffer, verticalMiddle});
@@ -38,26 +38,16 @@ void ofApp::update() {
 	const double speedChange{300 * ofGetLastFrameTime()};
 
 	// Move player 1 paddle if necessary.
-	if (p1UpPressed) p1YPosition -= speedChange;
-	if (p1DownPressed) p1YPosition += speedChange;
-
 	if (p1UpPressed) p1Paddle.moveVertically(-speedChange);
 	if (p1DownPressed) p1Paddle.moveVertically(speedChange);
 
-	p1Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
-
 	// Move player 2 paddle if necessary.
-	if (p2UpPressed) p2YPosition -= speedChange;
-	if (p2DownPressed) p2YPosition += speedChange;
-
 	if (p2UpPressed) p2Paddle.moveVertically(-speedChange);
 	if (p2DownPressed) p2Paddle.moveVertically(speedChange);
 
-	p2Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
-
 	// Ensure neither paddle leaves the canvas.
-	p1YPosition = ofClamp(p1YPosition, 50, 450);
-	p2YPosition = ofClamp(p2YPosition, 50, 450);
+	p1Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
+	p2Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
 
 	// MOVE BALL
 	// Move ball's position by its speed using FPS independent motion (delta time).
@@ -74,24 +64,24 @@ void ofApp::update() {
 
 	// BALL PADDLE 1 BOUNCE
 	if ((ballXPosition > 50 && ballXPosition < 70)
-		&& (ballYPosition > p1YPosition - 60)
-		&& (ballYPosition < p1YPosition + 60)) {
+		&& (ballYPosition > p1Paddle.position.y - 60)
+		&& (ballYPosition < p1Paddle.position.y + 60)) {
 		// Reverse horizontal direction.
 		ballXSpeed *= -1;
 		// Increase or decrease vertical speed depending on where ball hits paddle.
-		ballYSpeed += ballYPosition - p1YPosition;
+		ballYSpeed += ballYPosition - p1Paddle.position.y;
 		// Ensure that ball's x position is "pushed" away from the interior of the paddle.
 		ballXPosition = 70;
 	}
 
 	// BALL PADDLE 2 BOUNCE
 	if ((ballXPosition > 730 && ballXPosition < 750)
-		&& (ballYPosition > p2YPosition - 60)
-		&& (ballYPosition < p2YPosition + 60)) {
+		&& (ballYPosition > p2Paddle.position.y - 60)
+		&& (ballYPosition < p2Paddle.position.y + 60)) {
 		// Reverse horizontal direction.
 		ballXSpeed *= -1;
 		// Increase or decrease vertical speed depending on where ball hits paddle.
-		ballYSpeed += ballYPosition - p1YPosition;
+		ballYSpeed += ballYPosition - p2Paddle.position.y;
 		// Ensure that ball's x position is "pushed" away from the interior of the paddle.
 		ballXPosition = 730;
 	}

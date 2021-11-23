@@ -55,8 +55,6 @@ private:
 	float ballXPosition{0.0f}, ballYPosition{0.0f};
 	float ballXSpeed{0.0f}, ballYSpeed{0.0f};
 
-	float p1YPosition{0.0f}, p2YPosition{0.0f};
-
 	short p1Score{0}, p2Score{0};
 
 	const int paddleWidth{20};
