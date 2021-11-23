@@ -27,7 +27,6 @@ void ofApp::update() {
 	}
 
 	// MOVE PADDLES
-
 	// FPS independent speedChance for paddles using the oF version of delta time.
 	const double speedChange{300 * ofGetLastFrameTime()};
 
