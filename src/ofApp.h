@@ -15,6 +15,10 @@ public:
 		position = destination;
 	}
 
+	void moveVertically(float offset) {
+		position.y += offset;
+	}
+
 	void clampToBoundary(glm::vec2 min, glm::vec2 max) {
 		position.x = ofClamp(position.x, min.x + width / 2, max.x - width / 2);
 		position.y = ofClamp(position.y, min.y + height / 2, max.y - height / 2);

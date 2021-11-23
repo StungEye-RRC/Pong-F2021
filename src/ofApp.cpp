@@ -41,9 +41,19 @@ void ofApp::update() {
 	if (p1UpPressed) p1YPosition -= speedChange;
 	if (p1DownPressed) p1YPosition += speedChange;
 
+	if (p1UpPressed) p1Paddle.moveVertically(-speedChange);
+	if (p1DownPressed) p1Paddle.moveVertically(speedChange);
+
+	p1Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
+
 	// Move player 2 paddle if necessary.
 	if (p2UpPressed) p2YPosition -= speedChange;
 	if (p2DownPressed) p2YPosition += speedChange;
+
+	if (p2UpPressed) p2Paddle.moveVertically(-speedChange);
+	if (p2DownPressed) p2Paddle.moveVertically(speedChange);
+
+	p2Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
 
 	// Ensure neither paddle leaves the canvas.
 	p1YPosition = ofClamp(p1YPosition, 50, 450);
@@ -110,8 +120,6 @@ void ofApp::draw() {
 	ofDrawBitmapString("P2: " + std::to_string(p2Score), 550, 40);
 
 	// DRAW PADDLES
-	ofDrawRectangle(50, p1YPosition, 20, 100);
-	ofDrawRectangle(750, p2YPosition, 20, 100);
 	p1Paddle.draw();
 	p2Paddle.draw();
 
