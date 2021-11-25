@@ -9,8 +9,6 @@ void ofApp::setup() {
 
 //--------------------------------------------------------------
 void ofApp::update() {
-
-
 	// RALLY RESTART
 	if (startRally) {
 		startRally = false;
