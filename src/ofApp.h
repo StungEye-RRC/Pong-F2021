@@ -47,9 +47,43 @@ public:
 		position += velocity * deltaTime;
 	}
 
-	void accelerate(glm::vec2 impulse); // This impulse will be applied to the velocity.
-	void bounceHorizontalWithEdge(float ceilingY, float floorY);
-	void bounceVerticalWith(Sprite other);
+	void bounceHorizontalWithEdge(float ceilingY, float floorY) {
+		// Adjust ceiling and floor positions for the ball size.
+		ceilingY += height / 2.0f;
+		floorY -= height / 2.0f;
+
+		if (position.y <= ceilingY || position.y >= floorY) {
+			velocity.y *= -1;
+			position.y = ofClamp(position.y, ceilingY, floorY);
+		}
+	}
+
+	void bounceVerticalWith(Sprite other) {
+		float dy{position.y - other.position.y};
+		float hitDistanceY{0.5f * (height + other.height)};
+
+		// Is this sprite inline with the other sprite vertically?
+		if (std::abs(dy) < hitDistanceY) {
+			float dx{position.x - other.position.x};
+			float hitDistanceX{0.5f * (width + other.width)};
+
+			// Is this sprite inline with the other sprite horizontall? If yes, a collision! 
+			if (std::abs(dx) < hitDistanceX) {
+				// Reverse the x speed.
+				velocity.x *= -1;
+				float direction = dx / std::abs(dx); // Either 1 or -1
+				// Push the sprite away from the other sprite horizontally.
+				position.x = other.position.x + (hitDistanceX * direction);
+
+				accelerate({0, position.y - other.position.y});
+			}
+		}
+	}
+
+	// This impulse will be applied to the velocity.
+	void accelerate(glm::vec2 impulse) {
+		velocity += impulse;
+	}
 
 };
 
@@ -69,9 +103,6 @@ private:
 
 	bool startRally{true};
 	bool p1Serves{ofRandom(0, 100) < 50};
-
-	float ballXPosition{0.0f}, ballYPosition{0.0f};
-	float ballXSpeed{0.0f}, ballYSpeed{0.0f};
 
 	short p1Score{0}, p2Score{0};
 

@@ -16,23 +16,16 @@ void ofApp::update() {
 		const auto verticalMiddle{canvasHeight / 2.0f};
 
 		// Reposition ball and paddles to center points.
-		ballXPosition = horizontalMiddle;
-		ballYPosition = verticalMiddle;
-
 		ball.warpTo({horizontalMiddle, verticalMiddle});
-
 		p1Paddle.warpTo({paddleEdgeBuffer, verticalMiddle});
 		p2Paddle.warpTo({canvasWidth - paddleEdgeBuffer, verticalMiddle});
 
 		// Pick random Y speed from a predefined selection.
 		std::vector<float> startSpeeds{-105.0, -70.0f, -35.0f, 35.0f, 70.0f, 105.0f};
 		ofRandomize(startSpeeds);
-		ballYSpeed = startSpeeds[0];
 
 		// Set X speed (horizontal direction) depending on who is serving.
-		ballXSpeed = p1Serves ? 300 : -300;
-
-		ball.cruiseAt({p1Serves ? 300 : -300, startSpeeds[0]});
+		ball.cruiseAt({p1Serves ? gameSpeed : -gameSpeed, 300}); // startSpeeds[0]});
 	}
 
 	// MOVE PADDLES
@@ -47,44 +40,17 @@ void ofApp::update() {
 
 	// MOVE BALL
 	// Move ball's position by its speed using FPS independent motion (delta time).
-	ballXPosition += ballXSpeed * ofGetLastFrameTime();
-	ballYPosition += ballYSpeed * ofGetLastFrameTime();
 	ball.move(deltaTime);
 
 	// BALL EDGE BOUNCE
-	if (ballYPosition <= 10 || ballYPosition >= canvasHeight - 10) {
-		// Reverse vertical direction if ball hits top or bottom edge of canvas.
-		ballYSpeed *= -1;
-		// Ensure that ball's y position is "pushed" back into the canvas if necessary.
-		ballYPosition = ofClamp(ballYPosition, 10, canvasHeight - 10);
-	}
+	ball.bounceHorizontalWithEdge(0, canvasHeight);
 
-	// BALL PADDLE 1 BOUNCE
-	if ((ballXPosition > 50 && ballXPosition < 70)
-		&& (ballYPosition > p1Paddle.position.y - 60)
-		&& (ballYPosition < p1Paddle.position.y + 60)) {
-		// Reverse horizontal direction.
-		ballXSpeed *= -1;
-		// Increase or decrease vertical speed depending on where ball hits paddle.
-		ballYSpeed += ballYPosition - p1Paddle.position.y;
-		// Ensure that ball's x position is "pushed" away from the interior of the paddle.
-		ballXPosition = 70;
-	}
-
-	// BALL PADDLE 2 BOUNCE
-	if ((ballXPosition > 730 && ballXPosition < 750)
-		&& (ballYPosition > p2Paddle.position.y - 60)
-		&& (ballYPosition < p2Paddle.position.y + 60)) {
-		// Reverse horizontal direction.
-		ballXSpeed *= -1;
-		// Increase or decrease vertical speed depending on where ball hits paddle.
-		ballYSpeed += ballYPosition - p2Paddle.position.y;
-		// Ensure that ball's x position is "pushed" away from the interior of the paddle.
-		ballXPosition = 730;
-	}
+	// BALL PADDLE BOUNCE
+	ball.bounceVerticalWith(p1Paddle);
+	ball.bounceVerticalWith(p2Paddle);
 
 	// CHECK IF PLAYER 1 SCORES POINT 
-	if (ballXPosition > canvasWidth) {
+	if (ball.position.x > canvasWidth) {
 		// Increase player 1 score and flags to ensure p1 serves next.
 		++p1Score;
 		startRally = true;
@@ -92,7 +58,7 @@ void ofApp::update() {
 	}
 
 	// CHECK IF PLAYER 2 SCORES POINT 
-	if (ballXPosition < 0) {
+	if (ball.position.x < 0) {
 		// Increase player 2 score and flags to ensure p2 serves next.
 		++p2Score;
 		startRally = true;
@@ -111,7 +77,6 @@ void ofApp::draw() {
 	p2Paddle.draw();
 
 	// DRAW BALL
-	ofDrawRectangle(ballXPosition, ballYPosition, 20, 20);
 	ball.draw();
 }
 
