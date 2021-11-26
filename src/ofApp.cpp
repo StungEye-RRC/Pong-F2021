@@ -19,6 +19,8 @@ void ofApp::update() {
 		ballXPosition = horizontalMiddle;
 		ballYPosition = verticalMiddle;
 
+		ball.warpTo({horizontalMiddle, verticalMiddle});
+
 		p1Paddle.warpTo({paddleEdgeBuffer, verticalMiddle});
 		p2Paddle.warpTo({canvasWidth - paddleEdgeBuffer, verticalMiddle});
 
@@ -29,19 +31,15 @@ void ofApp::update() {
 
 		// Set X speed (horizontal direction) depending on who is serving.
 		ballXSpeed = p1Serves ? 300 : -300;
+
+		ball.cruiseAt({p1Serves ? 300 : -300, startSpeeds[0]});
 	}
 
 	// MOVE PADDLES
 	// FPS independent speedChance for paddles using the oF version of delta time.
-	const double speedChange{300 * ofGetLastFrameTime()};
-
-	// Move player 1 paddle if necessary.
-	if (p1UpPressed) p1Paddle.moveVertically(-speedChange);
-	if (p1DownPressed) p1Paddle.moveVertically(speedChange);
-
-	// Move player 2 paddle if necessary.
-	if (p2UpPressed) p2Paddle.moveVertically(-speedChange);
-	if (p2DownPressed) p2Paddle.moveVertically(speedChange);
+	const float deltaTime = ofGetLastFrameTime();
+	p1Paddle.move(deltaTime);
+	p2Paddle.move(deltaTime);
 
 	// Ensure neither paddle leaves the canvas.
 	p1Paddle.clampToBoundary({0, 0}, {canvasWidth, canvasHeight});
@@ -51,6 +49,7 @@ void ofApp::update() {
 	// Move ball's position by its speed using FPS independent motion (delta time).
 	ballXPosition += ballXSpeed * ofGetLastFrameTime();
 	ballYPosition += ballYSpeed * ofGetLastFrameTime();
+	ball.move(deltaTime);
 
 	// BALL EDGE BOUNCE
 	if (ballYPosition <= 10 || ballYPosition >= canvasHeight - 10) {
@@ -113,24 +112,23 @@ void ofApp::draw() {
 
 	// DRAW BALL
 	ofDrawRectangle(ballXPosition, ballYPosition, 20, 20);
+	ball.draw();
 }
 
 //--------------------------------------------------------------
 // Is player 1 or player 2 requesting to move their paddles up or down using the keyboard.
 void ofApp::keyPressed(int key) {
-	if (key == 'w') p1UpPressed = true;
-	if (key == 's') p1DownPressed = true;
-	if (key == 'i') p2UpPressed = true;
-	if (key == 'k') p2DownPressed = true;
+	if (key == 'w') p1Paddle.cruiseAt({0, -gameSpeed});
+	if (key == 's') p1Paddle.cruiseAt({0, gameSpeed});
+	if (key == 'i') p2Paddle.cruiseAt({0, -gameSpeed});
+	if (key == 'k') p2Paddle.cruiseAt({0, gameSpeed});
 }
 
 //--------------------------------------------------------------
 // Has player 1 or player 2 released their movement keys?
 void ofApp::keyReleased(int key) {
-	if (key == 'w') p1UpPressed = false;
-	if (key == 's') p1DownPressed = false;
-	if (key == 'i') p2UpPressed = false;
-	if (key == 'k') p2DownPressed = false;
+	if (key == 'w' || key == 's') p1Paddle.cruiseAt({0, 0});
+	if (key == 'i' || key == 'k') p2Paddle.cruiseAt({0, 0});
 }
 
 //--------------------------------------------------------------

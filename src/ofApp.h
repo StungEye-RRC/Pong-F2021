@@ -15,10 +15,6 @@ public:
 		position = destination;
 	}
 
-	void moveVertically(float offset) {
-		position.y += offset;
-	}
-
 	void clampToBoundary(glm::vec2 min, glm::vec2 max) {
 		position.x = ofClamp(position.x, min.x + width / 2, max.x - width / 2);
 		position.y = ofClamp(position.y, min.y + height / 2, max.y - height / 2);
@@ -41,9 +37,17 @@ public:
 		: Sprite{xPosition, yPosition, width, height}, velocity{xSpeed, ySpeed} {
 	}
 
-	void cruiseAt(glm::vec2 newVelocity); // A setter for velocity.
+	// A setter for velocity.
+	void cruiseAt(glm::vec2 newVelocity) {
+		velocity = newVelocity;
+	}
+
+	// Apply the velocity to the position.
+	void move(float deltaTime) {
+		position += velocity * deltaTime;
+	}
+
 	void accelerate(glm::vec2 impulse); // This impulse will be applied to the velocity.
-	void move(float deltaTime);
 	void bounceHorizontalWithEdge(float ceilingY, float floorY);
 	void bounceVerticalWith(Sprite other);
 
@@ -66,8 +70,6 @@ private:
 	bool startRally{true};
 	bool p1Serves{ofRandom(0, 100) < 50};
 
-	bool p1UpPressed{false}, p1DownPressed{false}, p2UpPressed{false}, p2DownPressed{false};
-
 	float ballXPosition{0.0f}, ballYPosition{0.0f};
 	float ballXSpeed{0.0f}, ballYSpeed{0.0f};
 
@@ -78,8 +80,9 @@ private:
 	const int paddleEdgeBuffer{50};
 	const int ballWidth{20};
 	const int ballHeight{20};
+	const int gameSpeed{300};
 
-	Sprite p1Paddle{0, 0, paddleWidth, paddleHeight};
-	Sprite p2Paddle{0, 0, paddleWidth, paddleHeight};
+	MotionSprite p1Paddle{0, 0, paddleWidth, paddleHeight, 0, 0};
+	MotionSprite p2Paddle{0, 0, paddleWidth, paddleHeight, 0, 0};
 	MotionSprite ball{0, 0, ballWidth, ballHeight, 0, 0};
 };
