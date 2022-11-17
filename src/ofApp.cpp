@@ -60,7 +60,7 @@ void ofApp::update() {
 		&& (ballYPosition > p2YPosition - 60)
 		&& (ballYPosition < p2YPosition + 60)) {
 		ballXSpeed *= -1;
-		ballYSpeed += ballYPosition - p1YPosition;
+		ballYSpeed += ballYPosition - p2YPosition;
 		ballXPosition = 730;
 	}
 
